@@ -236,17 +236,17 @@ export default function Page() {
     <main className="auth-shell">
       <section className="auth-card welcome-card" aria-labelledby="welcome-title">
         <div className="auth-brand"><div className="brand-mark"><ShieldCheck size={18} /></div><span>INF <span className="brand-dot">PRO</span></span></div>
-        <div className="auth-heading"><p className="eyebrow">PRIVATE SEARCH CENTER</p><h1 id="welcome-title">Bem-vindo ao INF PRO!</h1><p>Seja muito bem-vindo ao INF PRO! Estamos felizes em ter você aqui.</p></div>
+        <div className="auth-heading"><p className="eyebrow">PRIVATE SEARCH CENTER</p><h1 id="welcome-title">Welcome to INF PRO!</h1><p>We are happy to have you here.</p></div>
         <div className="welcome-copy">
-          <p>Para que tudo funcione corretamente e você aproveite ao máximo os recursos disponíveis no aplicativo, é importante realizar a configuração inicial do seu painel.</p>
-          <h2>Configure seu painel</h2>
-          <p>Antes de começar, acesse a área de Configurações e revise todas as opções disponíveis. Complete as configurações necessárias para garantir que o aplicativo esteja preparado para funcionar conforme esperado.</p>
-          <h2>Siga estes passos</h2>
-          <ol><li><strong>Acesse as Configurações:</strong> entre no painel de configurações do aplicativo.</li><li><strong>Revise as opções:</strong> confira cada configuração disponível.</li><li><strong>Conclua a configuração inicial:</strong> ajuste as opções necessárias de acordo com suas preferências.</li><li><strong>Confira tudo antes de continuar:</strong> certifique-se de que as configurações foram salvas corretamente.</li></ol>
-          <h2>Tudo pronto para começar!</h2>
-          <p>Após concluir essas etapas, você estará pronto para começar a utilizar o INF PRO.</p>
-          <p><strong>Importante:</strong> realizar a configuração inicial corretamente ajuda a evitar problemas e garante que os recursos que dependem dessas configurações funcionem como esperado.</p>
-          <p>Agradecemos por escolher o INF PRO. Desejamos a você uma ótima experiência!</p>
+          <p>To ensure everything works correctly and you get the most out of the app, please complete the initial dashboard setup.</p>
+          <h2>Configure your dashboard</h2>
+          <p>Before you begin, open Settings and review every available option. Complete the required setup so the app is ready to work as expected.</p>
+          <h2>Follow these steps</h2>
+          <ol><li><strong>Open Settings:</strong> go to the app&apos;s settings dashboard.</li><li><strong>Review the options:</strong> check each available setting.</li><li><strong>Complete the initial setup:</strong> adjust the options according to your preferences.</li><li><strong>Check everything before continuing:</strong> make sure your settings were saved correctly.</li></ol>
+          <h2>Everything is ready to begin!</h2>
+          <p>After completing these steps, you will be ready to start using INF PRO.</p>
+          <p><strong>Important:</strong> completing the initial setup correctly helps prevent issues and ensures that features depending on these settings work as expected.</p>
+          <p>Thank you for choosing INF PRO. We hope you have a great experience!</p>
         </div>
         <button className="auth-submit" type="button" onClick={() => setShowWelcome(false)}>Continue</button>
       </section>
