@@ -166,25 +166,11 @@ export default function Page() {
     setRecords((current) => [newRecord, ...current])
     setAnalysis({ phone: value, name: personName.trim() || 'Searched contact', photo: '', progress: 0, done: false, startedAt: Date.now(), source: selectedSource })
     setNotice(`Search started for “${value}”.`)
-    if (selectedSource === 'WhatsApp') {
-      try {
-        const response = await fetch('/api/whatsapp-profile', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone: fullPhone }) })
-        const result = await response.json()
-        if (!response.ok) throw new Error(result.error || 'The search could not be completed.')
-        const realPhoto = result.picture || ''
-        setAnalysis((current) => current ? { ...current, photo: realPhoto } : current)
-        setRecords((current) => current.map((record) => record.id === newRecord.id ? { ...record, photo: realPhoto, status: realPhoto ? 'Found' : 'Pending' } : record))
-        if (realPhoto) setNotice(`Photo found for “${value}”.`)
-      } catch (error) {
-        setNotice(error instanceof Error ? error.message : 'The search could not be completed.')
-      }
-    } else {
-      setQuery('')
-      setPersonName('')
-      setPersonPhoto('')
-      setPersonGender('')
-      setActive('History')
-    }
+    setQuery('')
+    setPersonName('')
+    setPersonPhoto('')
+    setPersonGender('')
+    setActive('History')
   }
 
   function startNewSearch() {
