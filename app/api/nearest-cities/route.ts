@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { getLocationFromPhoneParts } from '@/lib/phone-location'
 
 const countryCoordinates: Record<string, { latitude: string; longitude: string }> = {
   '+55:11': { latitude: '-23.5505', longitude: '-46.6333' },
@@ -27,8 +28,10 @@ const countryCoordinates: Record<string, { latitude: string; longitude: string }
 
 export async function POST(request: Request) {
   try {
-    const { countryCode, areaCode } = await request.json()
-    const normalizedAreaCode = String(areaCode || '').replace(/\D/g, '').slice(0, 2)
+    const { countryCode, areaCode, phone } = await request.json()
+    const location = getLocationFromPhoneParts(String(countryCode || ''), String(phone || areaCode || ''))
+    if (!location) return NextResponse.json({ error: 'Número incompleto ou código telefônico não reconhecido.', location: null }, { status: 422 })
+    const normalizedAreaCode = String(areaCode || phone || '').replace(/\D/g, '').slice(0, 2)
     const coordinates = countryCoordinates[`${countryCode}:${normalizedAreaCode}`] || countryCoordinates[countryCode] || countryCoordinates['+55']
     const apiKey = process.env.RAPIDAPI_KEY
 
@@ -46,7 +49,7 @@ export async function POST(request: Request) {
 
     if (!response.ok) return NextResponse.json({ error: 'Could not retrieve nearby cities.' }, { status: response.status })
     const data = await response.json()
-    return NextResponse.json({ data, coordinates })
+    return NextResponse.json({ data, coordinates, location })
   } catch {
     return NextResponse.json({ error: 'Invalid location request.' }, { status: 400 })
   }
