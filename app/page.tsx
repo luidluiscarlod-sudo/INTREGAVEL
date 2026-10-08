@@ -89,6 +89,7 @@ export default function Page() {
   const [showPassword, setShowPassword] = useState(false)
   const [authError, setAuthError] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [showWelcome, setShowWelcome] = useState(true)
 
   const handleAuthSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -230,8 +231,31 @@ export default function Page() {
   const activeSourceConfig = sourceConfig[selectedSource]
   const analysisStep = analysis ? analysisSteps[Math.min(Math.floor((analysis.progress / 100) * analysisSteps.length), analysisSteps.length - 1)] : analysisSteps[0]
 
+  if (showWelcome) {
+  return (
+    <main className="auth-shell">
+      <section className="auth-card welcome-card" aria-labelledby="welcome-title">
+        <div className="auth-brand"><div className="brand-mark"><ShieldCheck size={18} /></div><span>INF <span className="brand-dot">PRO</span></span></div>
+        <div className="auth-heading"><p className="eyebrow">PRIVATE SEARCH CENTER</p><h1 id="welcome-title">Bem-vindo ao INF PRO!</h1><p>Seja muito bem-vindo ao INF PRO! Estamos felizes em ter você aqui.</p></div>
+        <div className="welcome-copy">
+          <p>Para que tudo funcione corretamente e você aproveite ao máximo os recursos disponíveis no aplicativo, é importante realizar a configuração inicial do seu painel.</p>
+          <h2>Configure seu painel</h2>
+          <p>Antes de começar, acesse a área de Configurações e revise todas as opções disponíveis. Complete as configurações necessárias para garantir que o aplicativo esteja preparado para funcionar conforme esperado.</p>
+          <h2>Siga estes passos</h2>
+          <ol><li><strong>Acesse as Configurações:</strong> entre no painel de configurações do aplicativo.</li><li><strong>Revise as opções:</strong> confira cada configuração disponível.</li><li><strong>Conclua a configuração inicial:</strong> ajuste as opções necessárias de acordo com suas preferências.</li><li><strong>Confira tudo antes de continuar:</strong> certifique-se de que as configurações foram salvas corretamente.</li></ol>
+          <h2>Tudo pronto para começar!</h2>
+          <p>Após concluir essas etapas, você estará pronto para começar a utilizar o INF PRO.</p>
+          <p><strong>Importante:</strong> realizar a configuração inicial corretamente ajuda a evitar problemas e garante que os recursos que dependem dessas configurações funcionem como esperado.</p>
+          <p>Agradecemos por escolher o INF PRO. Desejamos a você uma ótima experiência!</p>
+        </div>
+        <button className="auth-submit" type="button" onClick={() => setShowWelcome(false)}>Continue</button>
+      </section>
+    </main>
+  )
+  }
+
   if (!isAuthenticated) {
-    return (
+  return (
       <main className="auth-shell">
         <section className="auth-card" aria-labelledby="auth-title">
           <div className="auth-brand"><div className="brand-mark"><ShieldCheck size={18} /></div><span>INF <span className="brand-dot">PRO</span></span></div>
