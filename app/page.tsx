@@ -166,7 +166,7 @@ export default function Page() {
       source: selectedSource,
     }
     setRecords((current) => [newRecord, ...current])
-    setAnalysis({ phone: value, name: personName.trim() || 'Searched contact', photo: '', progress: 0, done: false, startedAt: Date.now(), source: selectedSource })
+    setAnalysis({ phone: value, name: personName.trim() || 'Searched contact', photo: personPhoto, progress: 0, done: false, startedAt: Date.now(), source: selectedSource })
     setNotice(`Search started for “${value}”.`)
     setQuery('')
     setPersonName('')
@@ -223,7 +223,7 @@ export default function Page() {
     setNotice('Report exported successfully.')
   }
 
-  const analysisStepsBySource: Record<string, string[]> = { WhatsApp: ['Decrypting messages', 'Scanning photos and videos', 'Reviewing call activity', 'Checking shared media', 'Organizing available results'], Instagram: ['Reviewing Direct conversations', 'Scanning liked photos and videos', 'Checking saved posts', 'Reviewing shared media', 'Organizing Instagram results'], TikTok: ['Reviewing liked videos', 'Scanning comments and mentions', 'Checking shared videos', 'Reviewing follower activity', 'Organizing TikTok results'], Tinder: ['Reviewing profile details', 'Checking matches', 'Scanning conversations', 'Reviewing shared interests', 'Organizing Tinder results'], Facebook: ['Reviewing Messenger conversations', 'Scanning liked posts and photos', 'Checking shared media', 'Reviewing friend interactions', 'Organizing Facebook results'] }
+  const analysisStepsBySource: Record<string, string[]> = { WhatsApp: ['Reading profile signals', 'Reviewing conversations', 'Scanning shared photos and videos', 'Checking voice and video call activity', 'Building WhatsApp activity report'], Instagram: ['Reviewing profile and bio signals', 'Scanning posts, reels, and stories', 'Checking likes, saves, and comments', 'Reviewing followers and following activity', 'Building Instagram activity report'], TikTok: ['Reviewing creator profile signals', 'Scanning liked and posted videos', 'Checking comments, mentions, and hashtags', 'Reviewing followers and engagement patterns', 'Building TikTok activity report'], Tinder: ['Reviewing profile details and preferences', 'Checking match history', 'Scanning conversation activity', 'Reviewing shared interests and connections', 'Building Tinder activity report'], Facebook: ['Reviewing public profile signals', 'Scanning Messenger activity', 'Checking posts, reactions, and comments', 'Reviewing groups, pages, and connections', 'Building Facebook activity report'] }
   const analysisSteps = analysisStepsBySource[selectedSource] || analysisStepsBySource.WhatsApp
   const resultLabels: Record<string, { heading: string; description: string }> = { WhatsApp: { heading: 'WhatsApp results', description: 'Authorized messages, media, and call activity.' }, Instagram: { heading: 'Instagram results', description: 'Authorized Direct conversations, likes, saved posts, and shared media.' }, TikTok: { heading: 'TikTok results', description: 'Authorized liked videos, comments, mentions, and shares.' }, Tinder: { heading: 'Tinder results', description: 'Authorized matches, conversations, and profile activity.' }, Facebook: { heading: 'Facebook results', description: 'Authorized Messenger conversations, likes, and interactions.' } }
   const activeResultLabels = resultLabels[selectedSource] || resultLabels.WhatsApp
