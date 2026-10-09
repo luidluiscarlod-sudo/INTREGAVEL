@@ -109,6 +109,13 @@ button { cursor: pointer; }
   .search-panel { padding: 14px; gap: 12px; }
 }
 .found-image-wrap, .found-conversation-wrap { position: relative; overflow: hidden; }
+.whatsapp-conversation-unlock { margin-top: 16px; border: 1px solid #244054; border-radius: 12px; background: linear-gradient(135deg, #102331, #0e1927); padding: 18px; }
+.whatsapp-conversation-unlock > .section-header { align-items: flex-start; }
+.whatsapp-conversation-unlock > .section-header > svg { color: #5eead4; flex: 0 0 auto; }
+.whatsapp-conversation-images { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+.whatsapp-conversation-images figure { margin: 0; display: flex; justify-content: center; overflow: hidden; border: 1px solid #2b4862; border-radius: 10px; background: #0b1624; }
+.whatsapp-conversation-images img { display: block; width: 100%; height: auto; max-height: 520px; object-fit: contain; }
+@media (max-width: 680px) { .whatsapp-conversation-images { grid-template-columns: 1fr; } .whatsapp-conversation-images img { max-height: none; } }
 .found-image-wrap:nth-child(1), .found-conversation-wrap:nth-child(1) { background-image: url('/search-beach-glasses.jpg'); }
 .found-image-wrap:nth-child(2), .found-conversation-wrap:nth-child(2) { background-image: url('/search-man-ocean.jpg'); }
 .found-image-wrap:nth-child(3), .found-conversation-wrap:nth-child(3) { background-image: url('/search-beach-group.jpg'); }
