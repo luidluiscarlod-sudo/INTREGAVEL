@@ -236,19 +236,18 @@ export default function Page() {
     <main className="auth-shell">
       <section className="auth-card welcome-card" aria-labelledby="welcome-title">
         <div className="auth-brand"><div className="brand-mark"><ShieldCheck size={18} /></div><span>INF <span className="brand-dot">PRO</span></span></div>
-        <div className="auth-heading"><p className="eyebrow">PRIVATE SEARCH CENTER</p><h1 id="welcome-title">Welcome to INF PRO!</h1><p>We are happy to have you here.</p></div>
+        <div className="welcome-hero"><div className="welcome-hero-icon"><ShieldCheck size={25} /></div><div><p className="eyebrow">SECURE WORKSPACE SETUP</p><span className="welcome-status"><i />System readiness check</span></div></div>
+        <div className="auth-heading"><p className="eyebrow">PRIVATE SEARCH CENTER</p><h1 id="welcome-title">Welcome to INF PRO</h1><p>Prepare your workspace before entering the secure dashboard.</p></div>
         <div className="welcome-copy">
-          <p>To ensure everything works correctly and you get the most out of the app, please complete the initial dashboard setup.</p>
-          <h2>Configure your dashboard</h2>
-          <p>Before you begin, open Settings and review every available option. Complete the required setup so the app is ready to work as expected.</p>
-          <h2>Follow these steps</h2>
-          <ol><li><strong>Open Settings:</strong> go to the app&apos;s settings dashboard.</li><li><strong>Review the options:</strong> check each available setting.</li><li><strong>Complete the initial setup:</strong> adjust the options according to your preferences.</li><li><strong>Check everything before continuing:</strong> make sure your settings were saved correctly.</li></ol>
-          <h2>Everything is ready to begin!</h2>
-          <p>After completing these steps, you will be ready to start using INF PRO.</p>
-          <p><strong>Important:</strong> completing the initial setup correctly helps prevent issues and ensures that features depending on these settings work as expected.</p>
-          <p>Thank you for choosing INF PRO. We hope you have a great experience!</p>
+          <div className="welcome-callout"><ShieldCheck size={18} /><div><strong>Complete your initial configuration</strong><p>Review the panel settings first so every feature works correctly and consistently.</p></div></div>
+          <div className="welcome-section-heading"><span>01</span><h2>Configure your dashboard</h2></div>
+          <p>Open Settings and review every available option. Complete the required setup before creating an account or signing in.</p>
+          <div className="welcome-section-heading"><span>02</span><h2>Follow the setup checklist</h2></div>
+          <ol className="welcome-checklist"><li><span>1</span><div><strong>Open Settings</strong><small>Go to the app&apos;s settings dashboard.</small></div></li><li><span>2</span><div><strong>Review each option</strong><small>Check every available configuration.</small></div></li><li><span>3</span><div><strong>Save your preferences</strong><small>Complete the setup according to your needs.</small></div></li><li><span>4</span><div><strong>Confirm everything is ready</strong><small>Make sure your settings were saved correctly.</small></div></li></ol>
+          <div className="welcome-ready"><CheckCircle2 size={17} /><p><strong>Ready to begin?</strong> A complete setup helps prevent errors and unlocks features that depend on your configuration.</p></div>
         </div>
-        <button className="auth-submit" type="button" onClick={() => setShowWelcome(false)}>Continue</button>
+        <button className="auth-submit" type="button" onClick={() => setShowWelcome(false)}>Continue to account access <span>→</span></button>
+        <div className="auth-security"><ShieldCheck size={15} /><span>Your workspace is protected with secure access controls.</span></div>
       </section>
     </main>
   )
