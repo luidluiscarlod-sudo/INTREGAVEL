@@ -89,6 +89,7 @@ export default function Page() {
   const [showPassword, setShowPassword] = useState(false)
   const [authError, setAuthError] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [hasAccount, setHasAccount] = useState(false)
   const [showWelcome, setShowWelcome] = useState(true)
 
   const handleAuthSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -100,6 +101,18 @@ export default function Page() {
     }
     if (authPassword.length < 8) {
       setAuthError('Use a password with at least 8 characters.')
+      return
+    }
+    if (authMode === 'signup') {
+      setHasAccount(true)
+      setAuthMode('login')
+      setAuthPassword('')
+      setAuthPasswordRepeat('')
+      setAuthError('Account created successfully. Please sign in to continue.')
+      return
+    }
+    if (!hasAccount) {
+      setAuthError('Create your account first, then sign in to access INF PRO.')
       return
     }
     setIsAuthenticated(true)
@@ -265,7 +278,7 @@ export default function Page() {
             <label htmlFor="auth-password">Password</label>
             <div className="auth-input"><LockKeyhole size={17} /><input id="auth-password" type={showPassword ? 'text' : 'password'} value={authPassword} onChange={(event) => setAuthPassword(event.target.value)} placeholder="At least 8 characters" autoComplete={authMode === 'login' ? 'current-password' : 'new-password'} minLength={8} required /><button type="button" onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? 'Hide password' : 'Show password'}>{showPassword ? <EyeOff size={17} /> : <Eye size={17} />}</button></div>
             {authMode === 'signup' && <><label htmlFor="auth-password-repeat">Repeat password</label><div className="auth-input"><LockKeyhole size={17} /><input id="auth-password-repeat" type={showPassword ? 'text' : 'password'} value={authPasswordRepeat} onChange={(event) => setAuthPasswordRepeat(event.target.value)} placeholder="Repeat your password" autoComplete="new-password" minLength={8} required /></div></>}
-            {authError && <p className={`auth-message ${authError.includes('ready') ? 'success' : 'error'}`} role="status">{authError.includes('ready') && <CheckCircle2 size={15} />}{authError}</p>}
+            {authError && <p className={`auth-message ${authError.includes('successfully') ? 'success' : 'error'}`} role="status">{authError.includes('ready') && <CheckCircle2 size={15} />}{authError}</p>}
             <button className="auth-submit" type="submit">{authMode === 'login' ? 'Sign in' : 'Create account'}</button>
           </form>
           <div className="auth-links"><button type="button" onClick={() => { setAuthMode(authMode === 'login' ? 'signup' : 'login'); setAuthError('') }}>{authMode === 'login' ? 'Create a new account' : 'Already have an account? Sign in'}</button>{authMode === 'login' && <button type="button" onClick={() => setAuthError('Password recovery requests are reviewed before the next attempt. The review window can take up to 48 hours.')}>Forgot your password?</button>}</div>
