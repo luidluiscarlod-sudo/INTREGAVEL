@@ -109,6 +109,9 @@ button { cursor: pointer; }
   .search-panel { padding: 14px; gap: 12px; }
 }
 .found-image-wrap, .found-conversation-wrap { position: relative; overflow: hidden; }
+.tiktok-api-unlock { margin-top: 16px; border: 1px solid #34445a; border-radius: 12px; background: linear-gradient(135deg, #151d2b, #101722); padding: 18px; }
+.tiktok-api-unlock > .section-header { align-items: flex-start; }
+.tiktok-api-unlock > .section-header > svg { color: #f5f5f5; flex: 0 0 auto; }
 .instagram-media-unlock { margin-top: 16px; border: 1px solid #4c315b; border-radius: 12px; background: linear-gradient(135deg, #24162f, #151b2d); padding: 18px; }
 .instagram-media-unlock > .section-header { align-items: flex-start; }
 .instagram-media-unlock > .section-header > svg { color: #f0a5d5; flex: 0 0 auto; }
