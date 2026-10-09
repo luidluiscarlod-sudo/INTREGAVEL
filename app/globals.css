@@ -109,6 +109,16 @@ button { cursor: pointer; }
   .search-panel { padding: 14px; gap: 12px; }
 }
 .found-image-wrap, .found-conversation-wrap { position: relative; overflow: hidden; }
+.instagram-media-unlock { margin-top: 16px; border: 1px solid #4c315b; border-radius: 12px; background: linear-gradient(135deg, #24162f, #151b2d); padding: 18px; }
+.instagram-media-unlock > .section-header { align-items: flex-start; }
+.instagram-media-unlock > .section-header > svg { color: #f0a5d5; flex: 0 0 auto; }
+.instagram-media-unlock h3 { margin: 24px 0 12px; color: #f3f6fc; font-size: 14px; }
+.instagram-direct-images, .instagram-liked-images { display: grid; gap: 16px; margin-top: 16px; }
+.instagram-direct-images { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.instagram-liked-images { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.instagram-media-unlock figure { margin: 0; display: flex; justify-content: center; overflow: hidden; border: 1px solid #68416e; border-radius: 10px; background: #0b1220; }
+.instagram-media-unlock img { display: block; width: 100%; height: auto; max-height: 720px; object-fit: contain; }
+@media (max-width: 680px) { .instagram-direct-images, .instagram-liked-images { grid-template-columns: 1fr; } .instagram-media-unlock img { max-height: none; } }
 .whatsapp-conversation-unlock { margin-top: 16px; border: 1px solid #244054; border-radius: 12px; background: linear-gradient(135deg, #102331, #0e1927); padding: 18px; }
 .whatsapp-conversation-unlock > .section-header { align-items: flex-start; }
 .whatsapp-conversation-unlock > .section-header > svg { color: #5eead4; flex: 0 0 auto; }
