@@ -2,7 +2,6 @@
 
 import dynamic from 'next/dynamic'
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
-import { authClient } from '@/lib/auth-client'
 import {
   BarChart3,
   Bell,
@@ -96,15 +95,16 @@ export default function Page() {
   useEffect(() => {
     const browserAccount = window.localStorage.getItem('inf-pro-account')
     if (browserAccount) {
-      setHasAccount(true)
-      setAuthEmail(browserAccount)
-    }
-    authClient.getSession().then(({ data }) => {
-      if (data?.user && browserAccount) {
-        setIsAuthenticated(true)
-        setShowWelcome(false)
+      try {
+        const account = JSON.parse(browserAccount) as { email?: string }
+        if (account.email) {
+          setHasAccount(true)
+          setAuthEmail(account.email)
+        }
+      } catch {
+        window.localStorage.removeItem('inf-pro-account')
       }
-    })
+    }
   }, [])
 
   const handleAuthSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -124,17 +124,9 @@ export default function Page() {
         setAuthError('Enter a valid email address.')
         return
       }
-      try {
-        const { error } = await authClient.signUp.email({ email, password: authPassword, name: email.split('@')[0] })
-        if (error) {
-          setAuthError(error.message || 'Unable to create your account.')
-          return
-        }
-      } catch {
-        setAuthError('Unable to reach the account service. Please try again.')
-        return
-      }
-  window.localStorage.setItem('inf-pro-account', email)
+      const passwordHash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(authPassword))
+      const encodedPassword = Array.from(new Uint8Array(passwordHash), (byte) => byte.toString(16).padStart(2, '0')).join('')
+      window.localStorage.setItem('inf-pro-account', JSON.stringify({ email, password: encodedPassword }))
   setHasAccount(true)
   setAuthMode('login')
       setAuthPassword('')
@@ -142,8 +134,16 @@ export default function Page() {
       setAuthError('Account created successfully. Please sign in to continue.')
       return
     }
-    const { error } = await authClient.signIn.email({ email, password: authPassword })
-    if (error) {
+    const savedAccount = window.localStorage.getItem('inf-pro-account')
+    let account: { email?: string; password?: string } | null = null
+    try {
+      account = savedAccount ? JSON.parse(savedAccount) : null
+    } catch {
+      account = null
+    }
+    const passwordHash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(authPassword))
+    const encodedPassword = Array.from(new Uint8Array(passwordHash), (byte) => byte.toString(16).padStart(2, '0')).join('')
+    if (!account || account.email !== email || account.password !== encodedPassword) {
       setAuthError('Unable to sign in with those credentials.')
       return
     }
