@@ -109,6 +109,15 @@ button { cursor: pointer; }
   .search-panel { padding: 14px; gap: 12px; }
 }
 .found-image-wrap, .found-conversation-wrap { position: relative; overflow: hidden; }
+.facebook-api-unlock { margin-top: 16px; border: 1px solid #34445a; border-radius: 12px; background: linear-gradient(135deg, #172235, #101722); padding: 18px; }
+.facebook-api-unlock > .section-header { align-items: flex-start; }
+.facebook-api-unlock > .section-header > svg { color: #78a9ff; flex: 0 0 auto; }
+.tinder-media-panel { margin-top: 16px; border: 1px solid #553044; border-radius: 12px; background: linear-gradient(135deg, #241525, #141722); padding: 18px; }
+.tinder-media-panel .section-header { align-items: flex-start; }
+.tinder-media-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+.tinder-media-grid figure { margin: 0; overflow: hidden; border: 1px solid #68405b; border-radius: 10px; background: #0b0d14; }
+.tinder-media-grid img { display: block; width: 100%; height: auto; object-fit: contain; }
+@media (max-width: 680px) { .tinder-media-grid { grid-template-columns: 1fr; } }
 .tiktok-api-unlock { margin-top: 16px; border: 1px solid #34445a; border-radius: 12px; background: linear-gradient(135deg, #151d2b, #101722); padding: 18px; }
 .tiktok-api-unlock > .section-header { align-items: flex-start; }
 .tiktok-api-unlock > .section-header > svg { color: #f5f5f5; flex: 0 0 auto; }
