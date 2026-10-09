@@ -94,9 +94,13 @@ export default function Page() {
   const [showWelcome, setShowWelcome] = useState(true)
 
   useEffect(() => {
+    const browserAccount = window.localStorage.getItem('inf-pro-account')
+    if (browserAccount) {
+      setHasAccount(true)
+      setAuthEmail(browserAccount)
+    }
     authClient.getSession().then(({ data }) => {
-      if (data?.user) {
-        setHasAccount(true)
+      if (data?.user && browserAccount) {
         setIsAuthenticated(true)
         setShowWelcome(false)
       }
@@ -120,8 +124,9 @@ export default function Page() {
         setAuthError(error.message || 'Unable to create your account.')
         return
       }
-      setHasAccount(true)
-      setAuthMode('login')
+  window.localStorage.setItem('inf-pro-account', authEmail.trim().toLowerCase())
+  setHasAccount(true)
+  setAuthMode('login')
       setAuthPassword('')
       setAuthPasswordRepeat('')
       setAuthError('Account created successfully. Please sign in to continue.')
