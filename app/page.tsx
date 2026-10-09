@@ -147,7 +147,7 @@ export default function Page() {
     const value = query.trim()
     const fullPhone = selectedSource === 'WhatsApp' ? `${countryCode}${value.replace(/^\+/, '')}` : value
     if (!personPhoto || !personName.trim() || !personGender || !value) {
-      setNotice('Complete the photo, name, gender, and identifier before searching.')
+      setNotice('')
       return
     }
     if (!value) {
@@ -182,7 +182,7 @@ export default function Page() {
     setPersonPhoto('')
     setPersonGender('')
     setAnalysis(null)
-    setNotice('Complete the photo, name, gender, and identifier to search.')
+    setNotice('')
   }
 
   function handlePersonPhoto(event: React.ChangeEvent<HTMLInputElement>) {
