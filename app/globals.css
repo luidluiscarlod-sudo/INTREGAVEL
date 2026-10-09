@@ -119,6 +119,15 @@ button { cursor: pointer; }
 .found-image-wrap:nth-child(8), .found-conversation-wrap:nth-child(8) { background-image: url('/search-gym-woman.jpg'); }
 .found-image-wrap:nth-child(9), .found-conversation-wrap:nth-child(9) { background-image: url('/search-sea-woman.jpg'); }
 .found-image-wrap:nth-child(10), .found-conversation-wrap:nth-child(10) { background-image: url('/search-water-woman.jpg'); }
+.analysis-tinder .found-image-wrap:nth-child(1), .analysis-tinder ~ .found-images-panel .found-image-wrap:nth-child(1) { background-image: url('/tinder-marina.jpg'); }
+.analysis-tinder .found-image-wrap:nth-child(2), .analysis-tinder ~ .found-images-panel .found-image-wrap:nth-child(2) { background-image: url('/tinder-night.jpg'); }
+.analysis-tinder .found-image-wrap:nth-child(3), .analysis-tinder ~ .found-images-panel .found-image-wrap:nth-child(3) { background-image: url('/tinder-pet.jpg'); }
+.analysis-tinder .found-image-wrap:nth-child(4), .analysis-tinder ~ .found-images-panel .found-image-wrap:nth-child(4) { background-image: url('/tinder-selfie.jpg'); }
+.analysis-tinder .found-image-wrap:nth-child(5), .analysis-tinder ~ .found-images-panel .found-image-wrap:nth-child(5) { background-image: url('/tinder-car.jpg'); }
+.analysis-tinder + .found-images-panel .found-image-wrap:nth-child(n+6) { background-image: url('/tinder-marina.jpg'); }
+.analysis-tinder ~ .found-conversations-panel .found-conversation-wrap:nth-child(1) { background-image: url('/tinder-marina.jpg'); }
+.analysis-tinder ~ .found-conversations-panel .found-conversation-wrap:nth-child(2) { background-image: url('/tinder-night.jpg'); }
+.analysis-tinder ~ .found-conversations-panel .found-conversation-wrap:nth-child(3) { background-image: url('/tinder-pet.jpg'); }
 .found-image-wrap::after, .found-conversation-wrap::after { content: ''; position: absolute; inset: 50% auto auto 50%; width: 30px; height: 30px; margin: -15px; border: 3px solid rgba(255,255,255,.28); border-top-color: #5eead4; border-right-color: #69f2d5; border-radius: 50%; animation: research-image-loader 1s linear infinite; pointer-events: none; }
 .found-image-wrap img, .found-conversation-wrap img { visibility: hidden; opacity: 0; pointer-events: none; filter: blur(9px); transform: scale(1.12); } .found-image-wrap, .found-conversation-wrap { background: linear-gradient(145deg, #0b1d2c, #122c3b); cursor: default; user-select: none; }
 @keyframes research-image-loader { to { transform: rotate(360deg); } }
