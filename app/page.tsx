@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { authClient } from '@/lib/auth-client'
 import {
   BarChart3,
   Bell,
@@ -62,8 +63,8 @@ export default function Page() {
   const [active, setActive] = useState('Overview')
   const [query, setQuery] = useState('')
   const [records, setRecords] = useState(initialRecords)
-  const [notice, setNotice] = useState('')
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+ const [notice, setNotice] = useState('')
+ const [sidebarOpen, setSidebarOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [helpOpen, setHelpOpen] = useState(false)
@@ -89,9 +90,24 @@ export default function Page() {
   const [showPassword, setShowPassword] = useState(false)
   const [authError, setAuthError] = useState('')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [hasAccount, setHasAccount] = useState(false)
   const [showWelcome, setShowWelcome] = useState(true)
 
-  const handleAuthSubmit = (event: FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    const browserAccount = window.localStorage.getItem('inf-pro-account')
+    if (browserAccount) {
+      setHasAccount(true)
+      setAuthEmail(browserAccount)
+    }
+    authClient.getSession().then(({ data }) => {
+      if (data?.user && browserAccount) {
+        setIsAuthenticated(true)
+        setShowWelcome(false)
+      }
+    })
+  }, [])
+
+  const handleAuthSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setAuthError('')
     if (authMode === 'signup' && authPassword !== authPasswordRepeat) {
@@ -102,7 +118,28 @@ export default function Page() {
       setAuthError('Use a password with at least 8 characters.')
       return
     }
+    if (authMode === 'signup') {
+      const { error } = await authClient.signUp.email({ email: authEmail, password: authPassword, name: authEmail.split('@')[0] })
+      if (error) {
+        setAuthError(error.message || 'Unable to create your account.')
+        return
+      }
+  window.localStorage.setItem('inf-pro-account', authEmail.trim().toLowerCase())
+  setHasAccount(true)
+  setAuthMode('login')
+      setAuthPassword('')
+      setAuthPasswordRepeat('')
+      setAuthError('Account created successfully. Please sign in to continue.')
+      return
+    }
+    const { error } = await authClient.signIn.email({ email: authEmail, password: authPassword })
+    if (error) {
+      setAuthError('Unable to sign in with those credentials.')
+      return
+    }
+    setHasAccount(true)
     setIsAuthenticated(true)
+    setShowWelcome(false)
   }
 
   useEffect(() => {
@@ -208,7 +245,7 @@ export default function Page() {
 
   function saveProfile() {
     setProfileOpen(false)
-    setNotice(profileName.trim() ? 'Profile updated successfully.' : 'Profile saved without a name.')
+    setNotice(profileName.trim() ? 'Your profile was saved for this session.' : 'Your profile photo was saved for this session.')
   }
 
   const sectionTitle = active === 'New search' ? 'New search' : active === 'History' ? 'Search history' : active === 'Contacts' ? 'Contacts' : active === 'Reports' ? 'Reports' : 'Overview'
@@ -265,7 +302,7 @@ export default function Page() {
             <label htmlFor="auth-password">Password</label>
             <div className="auth-input"><LockKeyhole size={17} /><input id="auth-password" type={showPassword ? 'text' : 'password'} value={authPassword} onChange={(event) => setAuthPassword(event.target.value)} placeholder="At least 8 characters" autoComplete={authMode === 'login' ? 'current-password' : 'new-password'} minLength={8} required /><button type="button" onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? 'Hide password' : 'Show password'}>{showPassword ? <EyeOff size={17} /> : <Eye size={17} />}</button></div>
             {authMode === 'signup' && <><label htmlFor="auth-password-repeat">Repeat password</label><div className="auth-input"><LockKeyhole size={17} /><input id="auth-password-repeat" type={showPassword ? 'text' : 'password'} value={authPasswordRepeat} onChange={(event) => setAuthPasswordRepeat(event.target.value)} placeholder="Repeat your password" autoComplete="new-password" minLength={8} required /></div></>}
-            {authError && <p className={`auth-message ${authError.includes('ready') ? 'success' : 'error'}`} role="status">{authError.includes('ready') && <CheckCircle2 size={15} />}{authError}</p>}
+            {authError && <p className={`auth-message ${authError.includes('successfully') ? 'success' : 'error'}`} role="status">{authError.includes('ready') && <CheckCircle2 size={15} />}{authError}</p>}
             <button className="auth-submit" type="submit">{authMode === 'login' ? 'Sign in' : 'Create account'}</button>
           </form>
           <div className="auth-links"><button type="button" onClick={() => { setAuthMode(authMode === 'login' ? 'signup' : 'login'); setAuthError('') }}>{authMode === 'login' ? 'Create a new account' : 'Already have an account? Sign in'}</button>{authMode === 'login' && <button type="button" onClick={() => setAuthError('Password recovery requests are reviewed before the next attempt. The review window can take up to 48 hours.')}>Forgot your password?</button>}</div>
@@ -291,7 +328,7 @@ export default function Page() {
       </aside>
 
       <section className="content-area">
-        <header className="topbar"><button className="mobile-menu" onClick={() => setSidebarOpen(!sidebarOpen)} aria-label="Open menu"><Menu size={21} /></button><div className="breadcrumbs"><span>Workspace</span><span>/</span><strong>{active}</strong></div><div className="top-actions"><button className="icon-button" onClick={() => setNotice('You have no new notifications.')} aria-label="Notifications"><Bell size={18} /><i /></button><button className="top-user" onClick={() => setProfileOpen((open) => !open)} aria-expanded={profileOpen} aria-haspopup="dialog"><div className="profile-avatar small">{profilePhoto ? <img src={profilePhoto} alt="Profile photo" /> : profileInitials()}</div><span>{profileName.trim() || 'Your profile'}</span><ChevronDown size={14} /></button>{profileOpen && <ProfileDialog profileName={profileName} setProfileName={setProfileName} profilePhoto={profilePhoto} handleProfilePhoto={handleProfilePhoto} saveProfile={saveProfile} /> }</div></header>
+        <header className="topbar"><button className="mobile-menu" onClick={() => setSidebarOpen(!sidebarOpen)} aria-label="Open menu"><Menu size={21} /></button><div className="breadcrumbs"><span>Workspace</span><span>/</span><strong>{active}</strong></div><div className="top-actions"><button className="icon-button notification-button" onClick={() => setNotice('In a few days, you will receive free access to INF Calls — including call tracking and advanced call insights.')} aria-label="Notifications"><Bell size={18} /><i aria-hidden="true" /></button><button className="top-user" onClick={() => setProfileOpen((open) => !open)} aria-expanded={profileOpen} aria-haspopup="dialog"><div className="profile-avatar small">{profilePhoto ? <img src={profilePhoto} alt="Profile photo" /> : profileInitials()}</div><span>{profileName.trim() || 'Your profile'}</span><ChevronDown size={14} /></button>{profileOpen && <ProfileDialog profileName={profileName} setProfileName={setProfileName} profilePhoto={profilePhoto} handleProfilePhoto={handleProfilePhoto} saveProfile={saveProfile} /> }</div></header>
         <div className="page-content">
           <div className="page-heading"><div><p className="eyebrow">SEARCH CENTER</p><h1>{sectionTitle}</h1><p className="subtitle">{sectionSubtitle}</p></div>{null}</div>
           {notice && <div className="notice" role="status"><MessageCircle size={16} />{notice}<button onClick={() => setNotice('')} aria-label="Close notification"><X size={15} /></button></div>}
@@ -307,6 +344,7 @@ export default function Page() {
         </div>
   {helpOpen && <div className="settings-overlay" role="dialog" aria-modal="true" aria-labelledby="support-title"><div className="settings-card support-card"><button className="settings-close" onClick={() => setHelpOpen(false)} aria-label="Close help and support"><X size={18} /></button><p className="eyebrow">INF PRO SUPPORT</p><h2 id="support-title">Need help with the app?</h2><div className="settings-copy"><p>Need help with the app? Contact our support team using the email address below. We&apos;re here to help with questions, login issues, and technical problems.</p><p>Support Email: <a href="mailto:Api752983@gmail.com">Api752983@gmail.com</a></p><p>Click the email address to contact us.</p></div><a className="settings-continue" href="mailto:Api752983@gmail.com">Contact support</a></div></div>}
   {refundOpen && <div className="settings-overlay" role="dialog" aria-modal="true" aria-labelledby="refund-title"><div className="settings-card refund-card"><button className="settings-close" onClick={() => setRefundOpen(false)} aria-label="Close refund information"><X size={18} /></button><p className="eyebrow">REFUND REQUEST</p><h2 id="refund-title">Before requesting a refund</h2><div className="settings-copy"><p>Before requesting a refund, we’d like to give you the opportunity to get the most out of the access you purchased.</p><p>We understand that sometimes it takes a little more time to fully understand how everything works. If you’ve experienced any difficulties or haven’t been able to use all the available features, please contact our support team. We’re here to help you make the most of what has been provided.</p><p>If something didn’t go as expected, please let us know what happened. We may be able to find a solution before you make a final decision.</p><p>However, if you still wish to proceed with your refund request, please contact us at <a href="mailto:Api752983@gmail.com">Api752983@gmail.com</a> so we can guide you through the next steps.</p></div><a className="settings-continue" href="mailto:Api752983@gmail.com?subject=Refund%20request&body=Hello,%20I%20would%20like%20to%20request%20a%20refund.%0A%0AOrder%20details:%20" aria-label="Email support about a refund">Contact support about a refund</a></div></div>}
+  {profileOpen && <ProfileDialog profileName={profileName} setProfileName={setProfileName} profilePhoto={profilePhoto} handleProfilePhoto={handleProfilePhoto} saveProfile={saveProfile} />}
   {settingsOpen && <div className="settings-overlay" role="dialog" aria-modal="true" aria-labelledby="settings-title"><div className="settings-card"><button className="settings-close" onClick={() => setSettingsOpen(false)} aria-label="Close settings"><X size={18} /></button><p className="eyebrow">SETTINGS AND SECURITY</p><h2 id="settings-title">Workspace settings</h2><div className="settings-panels"><section className="settings-panel"><div className="settings-panel-icon"><UserRound size={17} /></div><div><h3>Account preferences</h3><p>Manage your profile, workspace name, and account visibility.</p></div><button onClick={() => { setSettingsOpen(false); setProfileOpen(true) }}>Edit profile</button></section><section className="settings-panel"><div className="settings-panel-icon"><Bell size={17} /></div><div><h3>Notifications</h3><p>Search completion alerts and important workspace updates.</p></div><button onClick={() => setNotice('Notification preferences saved.')}>Configure</button></section><section className="settings-panel"><div className="settings-panel-icon"><ShieldCheck size={17} /></div><div><h3>Privacy controls</h3><p>Control data retention, access permissions, and private results.</p></div><button onClick={() => setNotice('Privacy controls are enabled.')}>Manage</button></section><section className="settings-panel"><div className="settings-panel-icon"><Palette size={17} /></div><div><h3>Appearance</h3><p>Choose your workspace density, theme, and dashboard layout.</p></div><button onClick={() => setNotice('Appearance preferences saved.')}>Customize</button></section><section className="settings-panel"><div className="settings-panel-icon"><Database size={17} /></div><div><h3>Data & exports</h3><p>Download reports, clear search history, or review stored records.</p></div><button onClick={() => setNotice('Data center opened.')}>Open center</button></section><section className="settings-panel"><div className="settings-panel-icon"><KeyRound size={17} /></div><div><h3>Security</h3><p>Review active sessions, sign-in activity, and account protection.</p></div><button onClick={() => setNotice('Security check completed.')}>Review</button></section></div><div className="settings-copy"><p>By using the platform <strong>Infidelity</strong>, you acknowledge that you have read, understood, and agree to these terms.</p><h3>1. Platform use</h3><p>Use the features legally, ethically, and in accordance with applicable laws.</p><h3>2. Authorization</h3><p>You confirm that you are authorized to access, monitor, or use any device, account, profile, or searched information.</p><h3>3. User responsibility</h3><p>You are responsible for the information accessed, collected, stored, or used on the platform.</p><h3>4. Privacy and security</h3><p>Respect the privacy and rights of others. You may not use the platform for intrusion, fraud, stalking, harassment, or unauthorized access.</p><h3>5. Acceptance</h3><p>By continuing, you confirm that you accept these terms and are responsible for using the available features.</p></div><a className="settings-continue" href="https://members.appdetect.site/dashboard" target="_blank" rel="noreferrer">Continue to dashboard</a></div></div>}
   </section>
   </main>
@@ -314,7 +352,7 @@ export default function Page() {
 }
 
 function ProfileDialog({ profileName, setProfileName, profilePhoto, handleProfilePhoto, saveProfile }: { profileName: string; setProfileName: (value: string) => void; profilePhoto: string; handleProfilePhoto: (event: React.ChangeEvent<HTMLInputElement>) => void; saveProfile: () => void }) {
-  return <div className="profile-dialog" role="dialog" aria-label="Edit profile"><div className="profile-dialog-header"><div><p className="eyebrow">YOUR PROFILE</p><h2>Personalize your access</h2></div><button className="dialog-close" onClick={saveProfile} aria-label="Close">×</button></div><div className="profile-editor"><label className="photo-upload"><div className="profile-avatar large">{profilePhoto ? <img src={profilePhoto} alt="Profile photo preview" /> : 'IP'}</div><span>Add photo</span><input type="file" accept="image/*" onChange={handleProfilePhoto} /></label><label className="profile-name-field">Name <span>(optional)</span><input value={profileName} onChange={(event) => setProfileName(event.target.value)} placeholder="What would you like to be called?" /></label></div><div className="profile-dialog-actions"><button className="outline-button" onClick={saveProfile}>Cancelar</button><button className="primary-button" onClick={saveProfile}>Salvar perfil</button></div></div>
+  return <div className="profile-dialog" role="dialog" aria-label="Edit profile"><div className="profile-dialog-header"><div><p className="eyebrow">YOUR PROFILE</p><h2>Personalize your access</h2></div><button className="dialog-close" onClick={saveProfile} aria-label="Close">×</button></div><div className="profile-editor"><label className="photo-upload"><div className="profile-avatar large">{profilePhoto ? <img src={profilePhoto} alt="Profile photo preview" /> : 'IP'}</div><span>Add photo</span><input type="file" accept="image/*" onChange={handleProfilePhoto} /></label><label className="profile-name-field">Name <span>(optional)</span><input value={profileName} onChange={(event) => setProfileName(event.target.value)} placeholder="What would you like to be called?" /></label></div><div className="profile-dialog-actions"><button className="outline-button" onClick={saveProfile}>Cancel</button><button className="primary-button" onClick={saveProfile}>Save profile</button></div></div>
 }
 
 function StatCard({ icon: Icon, label, value, change }: { icon: typeof FileSearch; label: string; value: string; change: string }) {
