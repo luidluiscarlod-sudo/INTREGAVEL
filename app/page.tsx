@@ -339,7 +339,7 @@ export default function Page() {
           {navItems.map(({ label, icon: Icon }) => <button key={label} className={`nav-item ${active === label ? 'active' : ''}`} onClick={() => { setActive(label); setSidebarOpen(false); if (label === 'New search') startNewSearch() }}><Icon size={17} /><span>{label}</span>{label === 'History' && records.length > 0 && <span className="nav-count">{records.length}</span>}</button>)}
           <p className="nav-label nav-spacer">MANAGEMENT</p>
           <button className="nav-item nav-item-alert settings-ready" onClick={() => setSettingsOpen(true)}><Settings size={17} /><span>Settings</span></button>
-          <button className={`nav-item ${active === 'Locator' ? 'active' : ''}`} onClick={() => { setActive('Locator'); setSidebarOpen(false) }}><MapPin size={17} /><span>Number locator</span></button><button className="nav-item" onClick={() => setHelpOpen(true)}><HelpCircle size={17} /><span>Help & support</span></button><button className="nav-item" onClick={() => setRefundOpen(true)}><RotateCcw size={17} /><span>Refunds</span></button>
+          <button className="nav-item" onClick={() => setHelpOpen(true)}><HelpCircle size={17} /><span>Help & support</span></button><button className="nav-item" onClick={() => setRefundOpen(true)}><RotateCcw size={17} /><span>Refunds</span></button>
         </nav>
         <button className="sidebar-footer" onClick={() => setProfileOpen(true)}><div className="profile-avatar">{profilePhoto ? <img src={profilePhoto} alt="Profile photo" /> : profileInitials()}</div><div><strong>{profileName.trim() || 'Your profile'}</strong><small>Administrator</small></div><MoreHorizontal size={17} /></button>
       </aside>
