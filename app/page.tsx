@@ -82,7 +82,7 @@ export default function Page() {
   const [personName, setPersonName] = useState('')
   const [personPhoto, setPersonPhoto] = useState('')
   const [personGender, setPersonGender] = useState('')
-  const [analysis, setAnalysis] = useState<{ phone: string; name: string; photo: string; progress: number; done: boolean; startedAt: number; source: string } | null>(null)
+  const [analysis, setAnalysis] = useState<{ id: number; phone: string; name: string; photo: string; progress: number; done: boolean; startedAt: number; source: string } | null>(null)
   const socialSources = ['WhatsApp', 'Instagram', 'TikTok', 'Tinder', 'Facebook']
   const sourceTabs = [...socialSources, 'Number locator']
   const countryCodes = [['+55', 'Brazil'], ['+1', 'United States / Canada'], ['+351', 'Portugal'], ['+44', 'United Kingdom'], ['+34', 'Spain'], ['+33', 'France'], ['+49', 'Germany'], ['+39', 'Italy'], ['+52', 'Mexico'], ['+54', 'Argentina'], ['+56', 'Chile'], ['+57', 'Colombia'], ['+58', 'Venezuela'], ['+51', 'Peru'], ['+598', 'Uruguay'], ['+595', 'Paraguay'], ['+591', 'Bolivia'], ['+81', 'Japan'], ['+82', 'South Korea'], ['+86', 'China'], ['+91', 'India'], ['+61', 'Australia'], ['+64', 'Nova Zelândia'], ['+27', 'África do Sul'], ['+20', 'Egito'], ['+971', 'Emirados Árabes'], ['+972', 'Israel'], ['+90', 'Turquia'], ['+7', 'Rússia'], ['+380', 'Ucrânia'], ['+31', 'Países Baixos'], ['+32', 'Bélgica'], ['+41', 'Suíça'], ['+43', 'Áustria'], ['+45', 'Dinamarca'], ['+46', 'Suécia'], ['+47', 'Noruega'], ['+48', 'Polônia'], ['+30', 'Grécia'], ['+353', 'Irlanda']]
@@ -218,7 +218,7 @@ export default function Page() {
       source: selectedSource,
     }
     setRecords((current) => [newRecord, ...current])
-    setAnalysis({ phone: value, name: personName.trim() || 'Searched contact', photo: personPhoto, progress: 0, done: false, startedAt: Date.now(), source: selectedSource })
+    setAnalysis({ id: Date.now(), phone: value, name: personName.trim() || 'Searched contact', photo: personPhoto, progress: 0, done: false, startedAt: Date.now(), source: selectedSource })
     setNotice(`Search started for “${value}”.`)
     setQuery('')
     setPersonName('')
@@ -278,10 +278,12 @@ export default function Page() {
   const analysisStepsBySource: Record<string, string[]> = { WhatsApp: ['Reading profile signals', 'Reviewing conversations', 'Scanning shared photos and videos', 'Checking voice and video call activity', 'Building WhatsApp activity report'], Instagram: ['Reviewing profile and bio signals', 'Scanning posts, reels, and stories', 'Checking likes, saves, and comments', 'Reviewing followers and following activity', 'Building Instagram activity report'], TikTok: ['Reviewing creator profile signals', 'Scanning liked and posted videos', 'Checking comments, mentions, and hashtags', 'Reviewing followers and engagement patterns', 'Building TikTok activity report'], Tinder: ['Reviewing profile details and preferences', 'Checking match history', 'Scanning conversation activity', 'Reviewing shared interests and connections', 'Building Tinder activity report'], Facebook: ['Reviewing public profile signals', 'Scanning Messenger activity', 'Checking posts, reactions, and comments', 'Reviewing groups, pages, and connections', 'Building Facebook activity report'] }
   const analysisSteps = analysisStepsBySource[selectedSource] || analysisStepsBySource.WhatsApp
   const resultLabels: Record<string, { heading: string; description: string }> = { WhatsApp: { heading: 'WhatsApp results', description: 'Authorized messages, media, and call activity.' }, Instagram: { heading: 'Instagram results', description: 'Authorized Direct conversations, likes, saved posts, and shared media.' }, TikTok: { heading: 'TikTok results', description: 'Authorized liked videos, comments, mentions, and shares.' }, Tinder: { heading: 'Tinder results', description: 'Authorized matches, conversations, and profile activity.' }, Facebook: { heading: 'Facebook results', description: 'Authorized Messenger conversations, likes, and interactions.' } }
-  const activeResultLabels = resultLabels[selectedSource] || resultLabels.WhatsApp
+  const analysisSource = analysis?.source || selectedSource
+  const activeResultLabels = resultLabels[analysisSource] || resultLabels.WhatsApp
   const sourceConfig: Record<string, { title: string; description: string; items: string[]; label: string; placeholder: string }> = { WhatsApp: { title: 'WhatsApp intelligence', description: 'Review authorized profile signals, shared media, conversations, and call activity.', items: ['Profile photo', 'Messages and conversations', 'Shared photos and videos', 'Call activity'], label: 'WhatsApp number', placeholder: 'Enter a phone number' }, Instagram: { title: 'Instagram intelligence', description: 'Check out our social media and see what awaits you.', items: ['Direct messages and conversations', 'Liked photos and videos', 'Saved posts and shared media', 'Followers and following changes'], label: 'Instagram username', placeholder: 'Enter an Instagram username' }, TikTok: { title: 'TikTok intelligence', description: 'Review authorized public activity and account engagement signals.', items: ['Liked videos', 'Comments and mentions', 'Followers and following', 'Shared videos'], label: 'TikTok username', placeholder: 'Enter a TikTok username' }, Tinder: { title: 'Tinder intelligence', description: 'Organize authorized profile and match information in one workspace.', items: ['Profile details', 'Matches and conversations', 'Shared interests', 'Activity timeline'], label: 'Tinder profile', placeholder: 'Enter a profile identifier' }, Facebook: { title: 'Facebook intelligence', description: 'Review authorized profile activity, messages, and shared content.', items: ['Messenger conversations', 'Liked posts and photos', 'Shared media', 'Friends and interactions'], label: 'Facebook username', placeholder: 'Enter a Facebook username' } }
   const activeSourceConfig = sourceConfig[selectedSource]
-  const analysisStep = analysis ? analysisSteps[Math.min(Math.floor((analysis.progress / 100) * analysisSteps.length), analysisSteps.length - 1)] : analysisSteps[0]
+  const analysisStepsForCurrentSearch = analysisStepsBySource[analysisSource] || analysisStepsBySource.WhatsApp
+  const analysisStep = analysis ? analysisStepsForCurrentSearch[Math.min(Math.floor((analysis.progress / 100) * analysisStepsForCurrentSearch.length), analysisStepsForCurrentSearch.length - 1)] : analysisStepsForCurrentSearch[0]
 
   if (showWelcome) {
   return (
