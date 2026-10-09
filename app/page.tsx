@@ -172,7 +172,7 @@ export default function Page() {
     setPersonName('')
     setPersonPhoto('')
     setPersonGender('')
-    setActive('History')
+    setActive('New search')
   }
 
   function startNewSearch() {
