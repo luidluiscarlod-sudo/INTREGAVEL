@@ -1,7 +1,10 @@
 import { betterAuth } from 'better-auth'
 import { Pool } from 'pg'
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  options: '-c search_path=neon_auth,public',
+})
 const originValues = [
   'http://localhost:3000',
   process.env.V0_RUNTIME_URL,
