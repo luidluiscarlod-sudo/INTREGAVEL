@@ -108,8 +108,9 @@ export default function Page() {
   }, [])
 
   const handleAuthSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setAuthError('')
+  event.preventDefault()
+  setAuthError('')
+  const email = authEmail.trim().toLowerCase()
     if (authMode === 'signup' && authPassword !== authPasswordRepeat) {
       setAuthError('Passwords do not match.')
       return
@@ -119,12 +120,21 @@ export default function Page() {
       return
     }
     if (authMode === 'signup') {
-      const { error } = await authClient.signUp.email({ email: authEmail, password: authPassword, name: authEmail.split('@')[0] })
-      if (error) {
-        setAuthError(error.message || 'Unable to create your account.')
+      if (!email || !email.includes('@')) {
+        setAuthError('Enter a valid email address.')
         return
       }
-  window.localStorage.setItem('inf-pro-account', authEmail.trim().toLowerCase())
+      try {
+        const { error } = await authClient.signUp.email({ email, password: authPassword, name: email.split('@')[0] })
+        if (error) {
+          setAuthError(error.message || 'Unable to create your account.')
+          return
+        }
+      } catch {
+        setAuthError('Unable to reach the account service. Please try again.')
+        return
+      }
+  window.localStorage.setItem('inf-pro-account', email)
   setHasAccount(true)
   setAuthMode('login')
       setAuthPassword('')
@@ -132,7 +142,7 @@ export default function Page() {
       setAuthError('Account created successfully. Please sign in to continue.')
       return
     }
-    const { error } = await authClient.signIn.email({ email: authEmail, password: authPassword })
+    const { error } = await authClient.signIn.email({ email, password: authPassword })
     if (error) {
       setAuthError('Unable to sign in with those credentials.')
       return
