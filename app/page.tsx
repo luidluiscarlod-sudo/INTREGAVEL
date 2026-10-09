@@ -214,7 +214,7 @@ export default function Page() {
       name: personName.trim() || 'Searched person',
       phone: fullPhone,
       status: 'Pending',
-      updated: 'Agora',
+      updated: 'Now',
       avatar: (personName.trim() || 'PP').slice(0, 2).toUpperCase(),
       photo: '',
       gender: personGender || 'Not specified',
