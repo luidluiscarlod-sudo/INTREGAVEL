@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { authClient } from '@/lib/auth-client'
 import {
   BarChart3,
   Bell,
@@ -92,7 +93,17 @@ export default function Page() {
   const [hasAccount, setHasAccount] = useState(false)
   const [showWelcome, setShowWelcome] = useState(true)
 
-  const handleAuthSubmit = (event: FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    authClient.getSession().then(({ data }) => {
+      if (data?.user) {
+        setHasAccount(true)
+        setIsAuthenticated(true)
+        setShowWelcome(false)
+      }
+    })
+  }, [])
+
+  const handleAuthSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setAuthError('')
     if (authMode === 'signup' && authPassword !== authPasswordRepeat) {
@@ -104,6 +115,11 @@ export default function Page() {
       return
     }
     if (authMode === 'signup') {
+      const { error } = await authClient.signUp.email({ email: authEmail, password: authPassword, name: authEmail.split('@')[0] })
+      if (error) {
+        setAuthError(error.message || 'Unable to create your account.')
+        return
+      }
       setHasAccount(true)
       setAuthMode('login')
       setAuthPassword('')
@@ -111,11 +127,14 @@ export default function Page() {
       setAuthError('Account created successfully. Please sign in to continue.')
       return
     }
-    if (!hasAccount) {
-      setAuthError('Create your account first, then sign in to access INF PRO.')
+    const { error } = await authClient.signIn.email({ email: authEmail, password: authPassword })
+    if (error) {
+      setAuthError('Unable to sign in with those credentials.')
       return
     }
+    setHasAccount(true)
     setIsAuthenticated(true)
+    setShowWelcome(false)
   }
 
   useEffect(() => {
