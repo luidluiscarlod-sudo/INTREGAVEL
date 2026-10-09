@@ -62,8 +62,8 @@ export default function Page() {
   const [active, setActive] = useState('Overview')
   const [query, setQuery] = useState('')
   const [records, setRecords] = useState(initialRecords)
-  const [notice, setNotice] = useState('')
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+ const [notice, setNotice] = useState('')
+ const [sidebarOpen, setSidebarOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [helpOpen, setHelpOpen] = useState(false)
@@ -304,7 +304,7 @@ export default function Page() {
       </aside>
 
       <section className="content-area">
-        <header className="topbar"><button className="mobile-menu" onClick={() => setSidebarOpen(!sidebarOpen)} aria-label="Open menu"><Menu size={21} /></button><div className="breadcrumbs"><span>Workspace</span><span>/</span><strong>{active}</strong></div><div className="top-actions"><button className="icon-button" onClick={() => setNotice('You have no new notifications.')} aria-label="Notifications"><Bell size={18} /><i /></button><button className="top-user" onClick={() => setProfileOpen((open) => !open)} aria-expanded={profileOpen} aria-haspopup="dialog"><div className="profile-avatar small">{profilePhoto ? <img src={profilePhoto} alt="Profile photo" /> : profileInitials()}</div><span>{profileName.trim() || 'Your profile'}</span><ChevronDown size={14} /></button>{profileOpen && <ProfileDialog profileName={profileName} setProfileName={setProfileName} profilePhoto={profilePhoto} handleProfilePhoto={handleProfilePhoto} saveProfile={saveProfile} /> }</div></header>
+        <header className="topbar"><button className="mobile-menu" onClick={() => setSidebarOpen(!sidebarOpen)} aria-label="Open menu"><Menu size={21} /></button><div className="breadcrumbs"><span>Workspace</span><span>/</span><strong>{active}</strong></div><div className="top-actions"><button className="icon-button" onClick={() => setNotice('In a few days, you will receive free access to INF Calls — including call tracking and advanced call insights.')} aria-label="Notifications"><Bell size={18} /><i /></button><button className="top-user" onClick={() => setProfileOpen((open) => !open)} aria-expanded={profileOpen} aria-haspopup="dialog"><div className="profile-avatar small">{profilePhoto ? <img src={profilePhoto} alt="Profile photo" /> : profileInitials()}</div><span>{profileName.trim() || 'Your profile'}</span><ChevronDown size={14} /></button>{profileOpen && <ProfileDialog profileName={profileName} setProfileName={setProfileName} profilePhoto={profilePhoto} handleProfilePhoto={handleProfilePhoto} saveProfile={saveProfile} /> }</div></header>
         <div className="page-content">
           <div className="page-heading"><div><p className="eyebrow">SEARCH CENTER</p><h1>{sectionTitle}</h1><p className="subtitle">{sectionSubtitle}</p></div>{null}</div>
           {notice && <div className="notice" role="status"><MessageCircle size={16} />{notice}<button onClick={() => setNotice('')} aria-label="Close notification"><X size={15} /></button></div>}
