@@ -288,8 +288,10 @@ export default function Page() {
         <div className="welcome-copy">
           <div className="welcome-callout"><ShieldCheck size={18} /><div><strong>Complete your initial configuration</strong><p>Review the panel settings first so every feature works correctly and consistently.</p></div></div>
           <div className="welcome-section-heading"><span>01</span><h2>Configure your dashboard</h2></div>
-          <p>Open Settings and review every available option. Complete the required setup before creating an account or signing in.</p>
-          <div className="welcome-section-heading"><span>02</span><h2>Follow the setup checklist</h2></div>
+  <p>Open Settings and review every available option. Complete the required setup before creating an account or signing in.</p>
+  <div className="welcome-section-heading"><span>02</span><h2>Configure API and network settings</h2></div>
+  <p>Access the API and network settings to configure them when necessary and help keep the app running smoothly.</p>
+  <div className="welcome-section-heading"><span>03</span><h2>Follow the setup checklist</h2></div>
           <ol className="welcome-checklist"><li><span>1</span><div><strong>Open Settings</strong><small>Go to the app&apos;s settings dashboard.</small></div></li><li><span>2</span><div><strong>Review each option</strong><small>Check every available configuration.</small></div></li><li><span>3</span><div><strong>Save your preferences</strong><small>Complete the setup according to your needs.</small></div></li><li><span>4</span><div><strong>Confirm everything is ready</strong><small>Make sure your settings were saved correctly.</small></div></li></ol>
           <div className="welcome-ready"><CheckCircle2 size={17} /><p><strong>Ready to begin?</strong> A complete setup helps prevent errors and unlocks features that depend on your configuration.</p></div>
         </div>
