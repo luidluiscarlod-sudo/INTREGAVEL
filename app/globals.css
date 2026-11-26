@@ -43,7 +43,7 @@ button { cursor: pointer; }
 .api-access-link:hover { border-color: rgba(94,234,212,.6); background: rgba(16,55,70,.82); }
 .api-access-link:focus-visible { outline: 2px solid #5eead4; outline-offset: 3px; }
 .api-access-link span { font-size: 14px; line-height: 1; }
-@keyframes api-access-pulse { 0%, 100% { opacity: .78; text-shadow: 0 0 0 rgba(94,234,212,0); } 50% { opacity: 1; text-shadow: 0 0 9px rgba(94,234,212,.52); } }
+@keyframes api-access-pulse { 0%, 100% { opacity: .42; border-color: rgba(94,234,212,.2); box-shadow: 0 0 0 rgba(94,234,212,0); } 50% { opacity: 1; border-color: rgba(94,234,212,.85); box-shadow: 0 0 12px rgba(94,234,212,.42); } }
 @media (prefers-reduced-motion: reduce) { .api-access-link { animation: none; } }
 
 .icon-button:has(svg.lucide-bell) { animation: notification-shake 1.1s ease-in-out infinite; }
@@ -115,6 +115,10 @@ button { cursor: pointer; }
   .page-content { padding-left: 10px; padding-right: 10px; }
   .search-panel { padding: 14px; gap: 12px; }
 }
+ .api-guide-callout { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }.api-guide-callout p { flex: 1 1 180px; margin: 0; }.api-guide-button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 36px; padding: 0 12px; border: 1px solid #2b766e; border-radius: 7px; background: #0e353e; color: #8ff2df; font-size: 12px; font-weight: 700; text-decoration: none; white-space: nowrap; animation: api-guide-blink 1.25s ease-in-out infinite; }.api-guide-button:hover { background: #12454d; border-color: #55cbb9; }.api-guide-button:focus-visible { outline: 2px solid #5eead4; outline-offset: 2px; }
+@keyframes api-guide-blink { 0%, 100% { opacity: .48; box-shadow: 0 0 0 rgba(94,234,212,0); } 50% { opacity: 1; box-shadow: 0 0 12px rgba(94,234,212,.48); } }
+@media (prefers-reduced-motion: reduce) { .api-guide-button { animation: none; } }
+@media (max-width: 480px) { .api-guide-callout { align-items: stretch; gap: 8px; } .api-guide-callout p { flex-basis: 100%; } .api-guide-button { width: 100%; } }
 .found-image-wrap, .found-conversation-wrap { position: relative; overflow: hidden; }
 .facebook-api-unlock { margin-top: 16px; border: 1px solid #34445a; border-radius: 12px; background: linear-gradient(135deg, #172235, #101722); padding: 18px; }
 .facebook-api-unlock > .section-header { align-items: flex-start; }
