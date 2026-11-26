@@ -43,7 +43,7 @@ button { cursor: pointer; }
 .api-access-link:hover { border-color: rgba(94,234,212,.6); background: rgba(16,55,70,.82); }
 .api-access-link:focus-visible { outline: 2px solid #5eead4; outline-offset: 3px; }
 .api-access-link span { font-size: 14px; line-height: 1; }
-@keyframes api-access-pulse { 0%, 100% { opacity: .78; text-shadow: 0 0 0 rgba(94,234,212,0); } 50% { opacity: 1; text-shadow: 0 0 9px rgba(94,234,212,.52); } }
+@keyframes api-access-pulse { 0%, 100% { opacity: .42; border-color: rgba(94,234,212,.2); box-shadow: 0 0 0 rgba(94,234,212,0); } 50% { opacity: 1; border-color: rgba(94,234,212,.85); box-shadow: 0 0 12px rgba(94,234,212,.42); } }
 @media (prefers-reduced-motion: reduce) { .api-access-link { animation: none; } }
 
 .icon-button:has(svg.lucide-bell) { animation: notification-shake 1.1s ease-in-out infinite; }
